@@ -8,10 +8,10 @@
 </head>
 <body>
     <div>
-        <h1 id="header1">New Registration</h1>
+        <h1 id="header">New Registration</h1>
         
         <div id="registration-form">
-            <form action="/register" method="POST">
+            <form action="{{ url_for('register')}}" method="POST">
                 <div class="form-group">
                     <label for="username">Username:</label>
                     <input type="text" id="username" name="username" required>
