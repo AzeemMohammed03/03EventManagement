@@ -7,33 +7,43 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
 </head>
 <body>
-    <!-- Header Section -->
+
     <header>
         <nav>
             <ul>
-                <li><a href="index.html" target="_blank">Home</a></li>
-                <li><a href="login.html" target="_blank">Login</a></li>
-                <li><a href="#">Events</a></li>
-                <li><a href="#">About Us</a></li>
-                <li><a href="#">Gallery</a></li>
-                <li><a href="#">Contact</a></li>
+                <li><a href="{{ url_for('home') }}" target="_blank">Home</a></li>
+                <li><a href="{{ url_for('login') }}" target="_blank">Login</a></li>
+                <li><a href="{{ url_for('events') }}" target="_blank">Events</a></li>
+                <li><a href="{{ url_for('about') }}" target="_blank">About Us</a></li>
+                <li><a href="{{ url_for('gallery') }}" target="_blank">Gallery</a></li>
+                <li><a href="{{ url_for('contact') }}" target="_blank">Contact</a></li>
             </ul>
         </nav>
     </header>
 
-    <!-- Main Content Section -->
     <div id="main-content">
         <div id="login-container">
-            <!-- Login Section -->
             <div id="login-form">
                 <div class="login-heading">
-                    <!-- <img src="avatar.png" alt="User Avatar" id="avatar"> -->
                     <p>
                         <h3 id="quote">Your next unforgettable moment is <br>  just one click away.</h3>
                     </p>
                 </div>
-                <!-- <p class="description">Event management is a process of organizing a professional and focused event, for a particular target audience.</p> -->
-                <form action="/submit-login" method="post">
+
+                <!-- Flash Messages for Errors -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        <div class="flash-messages">
+                            {% for category, message in messages %}
+                                <div class="alert {{ category }}">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endwith %}
+
+                <form action="{{ url_for('login_submit') }}"target="_blank" method="post">
                     <div class="form-group">
                         <label for="username">Enter Username</label>
                         <input type="text" id="username" name="username" placeholder="Username" required>
@@ -46,13 +56,11 @@
                         <button type="submit" id="submit-btn">Submit</button>
                     </div>
                 </form>
-                <p>Don't have an account?<br><br><a href="{{ url_for('registration') }}">Click Here to Register yourself</a>
-                </p>
+                <p>Don't have an account?<br><br><a href="{{ url_for('registration') }}">Click Here to Register yourself</a></p>
             </div>
         </div>
     </div>
 
-    <!-- Footer Section -->
     <footer>
         <p>&copy; 2024 Event Management</p>
     </footer>
