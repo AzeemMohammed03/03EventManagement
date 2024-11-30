@@ -99,7 +99,7 @@ def login_submit():
 @app.route('/events')
 def events():
     if 'user_id' not in session:
-        flash('Please log in to access your events.', 'warning')
+        flash('Please log in to create or access your events.', 'danger')
         return redirect(url_for('login'))  # Redirect to login if not logged in
     events = Event.query.filter_by(user_id=session['user_id']).all()  # Fetch events related to the logged-in user
     return render_template('events.html', events=events)
