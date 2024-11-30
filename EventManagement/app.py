@@ -1,11 +1,12 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import datetime
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:Azeem%40123@localhost:3306/flask_project'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.secret_key = 'your_secret_key'  # Required for session management and flashing messages
+app.secret_key = 'your_secret_key'
 
 db = SQLAlchemy(app)
 
@@ -19,10 +20,27 @@ class User(db.Model):
     city = db.Column(db.String(50), nullable=True)
     state = db.Column(db.String(50), nullable=True)
 
+# Define the Event model
+class Event(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    address = db.Column(db.String(200), nullable=False)
+    event_details = db.Column(db.Text, nullable=False)
+    location = db.Column(db.String(100), nullable=False)
+    event_type = db.Column(db.String(20), nullable=False)
+    start_datetime = db.Column(db.DateTime, nullable=False)
+    end_datetime = db.Column(db.DateTime, nullable=False)
+    event_description = db.Column(db.Text, nullable=True)
+    contact_details = db.Column(db.String(100), nullable=False)
+    event_size = db.Column(db.Integer, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user = db.relationship('User', backref=db.backref('events', lazy=True))
+
 # Initialize the database
 with app.app_context():
     db.create_all()
 
+# Routes for user authentication
 @app.route('/')
 def login():
     return render_template('login.html')
@@ -42,24 +60,24 @@ def register():
     state = request.form['state']
 
     if not username or not password or not re_password or not mobile_number or not mail_id:
-        return "All fields are required!", 400
+        flash("All fields are required!", "danger")
+        return redirect(url_for('registration'))
 
     if password != re_password:
-        return "Passwords do not match!", 400
+        flash("Passwords do not match!", "danger")
+        return redirect(url_for('registration'))
 
-    # Check if the username already exists
     if User.query.filter_by(username=username).first():
-        return "Username already exists!", 400
+        flash("Username already exists!", "danger")
+        return redirect(url_for('registration'))
 
-    # Hash the password before storing it
     hashed_password = generate_password_hash(password)
-
-    # Save the user to the database
     new_user = User(username=username, password=hashed_password, mobile_number=mobile_number,
                     mail_id=mail_id, city=city, state=state)
     db.session.add(new_user)
     db.session.commit()
 
+    flash("Registration successful! Please log in.", "success")
     return redirect(url_for('login'))
 
 @app.route('/login/submit', methods=['POST'])
@@ -67,36 +85,68 @@ def login_submit():
     username = request.form['username']
     password = request.form['password']
 
-    # Check if the username exists
     user = User.query.filter_by(username=username).first()
 
     if user and check_password_hash(user.password, password):
-        # Store user ID in the session after successful login
         session['user_id'] = user.id
-        return redirect(url_for('events'))  # Redirect to events page if login is successful
+        flash('Logged in successfully!', 'success')
+        return redirect(url_for('events')) 
     else:
         flash('Invalid username or password!', 'danger')
-        return redirect(url_for('login'))  # Redirect back to login page on failure
+        return redirect(url_for('login'))
 
+# Routes for event management
 @app.route('/events')
 def events():
-    # Check if the user is logged in
     if 'user_id' not in session:
-        return redirect(url_for('login'))  # Redirect to login if the user is not logged in
-    return render_template('events.html')
+        flash('Please log in to access your events.', 'warning')
+        return redirect(url_for('login'))  # Redirect to login if not logged in
+    events = Event.query.filter_by(user_id=session['user_id']).all()  # Fetch events related to the logged-in user
+    return render_template('events.html', events=events)
+
+@app.route('/events/new', methods=['GET', 'POST'])
+def new_event():
+    if 'user_id' not in session:
+        flash('You need to log in to create an event!', 'danger')
+        return redirect(url_for('login'))  # Redirect to login if not logged in
+
+    if request.method == 'POST':
+        try:
+            event = Event(
+                name=request.form['name'],
+                address=request.form['address'],
+                event_details=request.form['event_details'],
+                location=request.form['location'],
+                event_type=request.form['event_type'],
+                start_datetime=datetime.strptime(request.form['start_datetime'], '%Y-%m-%dT%H:%M'),
+                end_datetime=datetime.strptime(request.form['end_datetime'], '%Y-%m-%dT%H:%M'),
+                event_description=request.form['event_description'],
+                contact_details=request.form['contact_details'],
+                event_size=request.form['event_size'],
+                user_id=session['user_id']  # Link the event to the logged-in user
+            )
+            db.session.add(event)
+            db.session.commit()
+            flash('Event created successfully!', 'success')
+            return redirect(url_for('login'))  # Redirect to events page after creating the event
+        except Exception as e:
+            flash(f'Error creating event: {e}', 'danger')
+            return redirect(url_for('login'))  # Stay on the event creation page if an error occurs
+
+    return render_template('new_event.html')
 
 
+@app.route('/logout')
+def logout():
+    session.pop('user_id', None)  # Remove the user_id from the session
+    flash('You have been logged out.', 'success')
+    return redirect(url_for('login'))  # Redirect to the login page
+
+
+# Other routes
 @app.route('/home')
 def home():
-    return render_template('index.html')  # Assuming 'index.html' is the homepage
-
-@app.route('/login')
-def login_page():
-    return render_template('login.html')
-
-@app.route('/events')
-def events_page():
-    return render_template('events.html')
+    return render_template('index.html')
 
 @app.route('/about')
 def about():

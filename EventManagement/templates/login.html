@@ -17,6 +17,9 @@
                 <li><a href="{{ url_for('about') }}" target="_blank">About Us</a></li>
                 <li><a href="{{ url_for('gallery') }}" target="_blank">Gallery</a></li>
                 <li><a href="{{ url_for('contact') }}" target="_blank">Contact</a></li>
+                {% if 'user_id' in session %}
+                    <li><a href="{{ url_for('logout') }}" class="logout-btn">Logout</a></li>
+                {% endif %}
             </ul>
         </nav>
     </header>
@@ -25,11 +28,9 @@
         <div id="login-container">
             <div id="login-form">
                 <div class="login-heading">
-                    <p>
-                        <h3 id="quote">Your next unforgettable moment is <br>  just one click away.</h3>
-                    </p>
+                    <h3 id="quote">Your next unforgettable moment is <br> just one click away.</h3>
                 </div>
-
+                
                 <!-- Flash Messages for Errors -->
                 {% with messages = get_flashed_messages(with_categories=true) %}
                     {% if messages %}
@@ -42,8 +43,8 @@
                         </div>
                     {% endif %}
                 {% endwith %}
-
-                <form action="{{ url_for('login_submit') }}"target="_blank" method="post">
+                
+                <form action="{{ url_for('login_submit') }}" target="_blank" method="post">
                     <div class="form-group">
                         <label for="username">Enter Username</label>
                         <input type="text" id="username" name="username" placeholder="Username" required>

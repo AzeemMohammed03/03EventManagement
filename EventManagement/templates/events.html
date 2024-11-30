@@ -3,9 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Event Form</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/events.css') }}">
 </head>
 <body>
-    <p>hello welcome to the events page</p>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div>
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endwith %}
+
+    <div class="form-container">
+        <h2>Create an Event</h2>
+        <form action="{{ url_for('new_event') }}" target="_blank" method="POST">
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="address">Address:</label>
+                <input type="text" id="address" name="address" required>
+            </div>
+            <div class="form-group">
+                <label for="event_details">Event Details:</label>
+                <textarea id="event_details" name="event_details" rows="3" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="location">Location:</label>
+                <input type="text" id="location" name="location" required>
+            </div>
+            <div class="form-group">
+                <label for="event_type">Type of Event:</label>
+                <select id="event_type" name="event_type" required>
+                    <option value="public">Public</option>
+                    <option value="private">Private</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="start_datetime">Start Date and Time:</label>
+                <input type="datetime-local" id="start_datetime" name="start_datetime" required>
+            </div>
+            <div class="form-group">
+                <label for="end_datetime">End Date and Time:</label>
+                <input type="datetime-local" id="end_datetime" name="end_datetime" required>
+            </div>
+            <div class="form-group">
+                <label for="event_description">Event Description:</label>
+                <textarea id="event_description" name="event_description" rows="4"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="contact_details">Contact Details:</label>
+                <input type="text" id="contact_details" name="contact_details" required>
+            </div>
+            <div class="form-group">
+                <label for="event_size">Event Size:</label>
+                <input type="number" id="event_size" name="event_size" required>
+            </div>
+            <button type="submit" class="submit-btn">Submit</button>
+        </form>
+    </div>
 </body>
 </html>
