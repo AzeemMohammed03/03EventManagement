@@ -24,8 +24,6 @@ class User(db.Model):
 class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
-    address = db.Column(db.String(200), nullable=False)
-    event_details = db.Column(db.Text, nullable=False)
     location = db.Column(db.String(100), nullable=False)
     event_type = db.Column(db.String(20), nullable=False)
     start_datetime = db.Column(db.DateTime, nullable=False)

@@ -93,6 +93,7 @@ input[type="reset"]:hover {
     margin-bottom: 15px;
     border: 1px solid transparent;
     border-radius: 4px;
+    color: #ddd;
 }
 .alert-success {
     color: #3c763d;
