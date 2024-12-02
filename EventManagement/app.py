@@ -112,14 +112,19 @@ def new_event():
 
     if request.method == 'POST':
         try:
+            start_datetime = datetime.strptime(request.form['start_datetime'], '%Y-%m-%dT%H:%M')
+            end_datetime = datetime.strptime(request.form['end_datetime'], '%Y-%m-%dT%H:%M')
+
+            # Check if start date is later than end date
+            if start_datetime > end_datetime:
+                flash('Start date cannot be greater than the end date!', 'danger')
+                return redirect(url_for('new_event'))  # Stay on the event creation page
             event = Event(
                 name=request.form['name'],
-                address=request.form['address'],
-                event_details=request.form['event_details'],
                 location=request.form['location'],
                 event_type=request.form['event_type'],
-                start_datetime=datetime.strptime(request.form['start_datetime'], '%Y-%m-%dT%H:%M'),
-                end_datetime=datetime.strptime(request.form['end_datetime'], '%Y-%m-%dT%H:%M'),
+                start_datetime=start_datetime,
+                end_datetime=end_datetime,
                 event_description=request.form['event_description'],
                 contact_details=request.form['contact_details'],
                 event_size=request.form['event_size'],
@@ -131,9 +136,9 @@ def new_event():
             return redirect(url_for('login'))  # Redirect to events page after creating the event
         except Exception as e:
             flash(f'Error creating event: {e}', 'danger')
-            return redirect(url_for('login'))  # Stay on the event creation page if an error occurs
+            return redirect(url_for('events'))  # Stay on the event creation page if an error occurs
 
-    return render_template('new_event.html')
+    return render_template('login.html')
 
 
 @app.route('/logout')

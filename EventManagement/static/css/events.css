@@ -1,20 +1,28 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: black;
+    background-color: #f5f5f5;
+    background-color: white;
     margin: 0;
-    padding: 20px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), 
+                url('image.png');
 }
 
 .form-container {
-    max-width: 620px;
+    max-width: 500px;
+    width: 80%;
     margin: auto;
-    background: rgb(19, 18, 18);
+    /* background: rgb(19, 18, 18); */
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-h2 {
+h1 {
     text-align: center;
     margin-bottom: 20px;
     color: rgb(247, 117, 3);
@@ -45,20 +53,39 @@ textarea {
     resize: vertical;
 }
 
-button.submit-btn {
-    width: 100%;
-    padding: 10px;
-    background-color: #FFA500;
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+input#submit {
+    background-color: #0f55bf;
     color: white;
+    padding: 10px 20px;
+    margin-right: 60px;
+    margin-left: 20px;
     border: none;
-    border-radius: 4px;
-    font-size: 16px;
+    border-radius: 7px;
     cursor: pointer;
 }
 
-button.submit-btn:hover {
-    background-color: #ff8800;
+input#cancel {
+    background-color: #dc3545;
+    color: white;
+    padding: 10px 20px;
+    margin-right: 20px;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
 }
+
+input[type="submit"]:hover, 
+input[type="reset"]:hover {
+    opacity: 0.9;
+}
+
+
 
 .alert {
     padding: 10px;
