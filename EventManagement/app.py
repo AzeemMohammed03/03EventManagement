@@ -2,25 +2,30 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
+import os
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:Azeem%40123@localhost:3306/flask_project'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'your_secret_key'
 
+# Configure upload folder
+app.config['UPLOAD_FOLDER'] = 'uploads'
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+
 db = SQLAlchemy(app)
 
-# Define the User model
+# User model
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
-    password = db.Column(db.String(50), nullable=False)
+    password = db.Column(db.String(100), nullable=False)
     mobile_number = db.Column(db.String(15), nullable=False)
     mail_id = db.Column(db.String(100), nullable=False)
     city = db.Column(db.String(50), nullable=True)
     state = db.Column(db.String(50), nullable=True)
 
-# Define the Event model
+# Event model
 class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
@@ -38,7 +43,6 @@ class Event(db.Model):
 with app.app_context():
     db.create_all()
 
-# Routes for user authentication
 @app.route('/')
 def login():
     return render_template('login.html')
@@ -88,80 +92,113 @@ def login_submit():
     if user and check_password_hash(user.password, password):
         session['user_id'] = user.id
         flash('Logged in successfully!', 'success')
-        return redirect(url_for('events')) 
+        return redirect(url_for('events'))
     else:
         flash('Invalid username or password!', 'danger')
         return redirect(url_for('login'))
 
-# Routes for event management
 @app.route('/events')
 def events():
     if 'user_id' not in session:
         flash('Please log in to create or access your events.', 'danger')
-        return redirect(url_for('login'))  # Redirect to login if not logged in
-    events = Event.query.filter_by(user_id=session['user_id']).all()  # Fetch events related to the logged-in user
+        return redirect(url_for('login'))
+    events = Event.query.filter_by(user_id=session['user_id']).all()
     return render_template('events.html', events=events)
 
 @app.route('/events/new', methods=['GET', 'POST'])
 def new_event():
     if 'user_id' not in session:
         flash('You need to log in to create an event!', 'danger')
-        return redirect(url_for('login'))  # Redirect to login if not logged in
+        return redirect(url_for('login'))
 
     if request.method == 'POST':
-        try:
-            start_datetime = datetime.strptime(request.form['start_datetime'], '%Y-%m-%dT%H:%M')
-            end_datetime = datetime.strptime(request.form['end_datetime'], '%Y-%m-%dT%H:%M')
+        start_datetime = datetime.strptime(request.form['start_datetime'], '%Y-%m-%dT%H:%M')
+        end_datetime = datetime.strptime(request.form['end_datetime'], '%Y-%m-%dT%H:%M')
 
-            # Check if start date is later than end date
-            if start_datetime > end_datetime:
-                flash('Start date cannot be greater than the end date!', 'danger')
-                return redirect(url_for('new_event'))  # Stay on the event creation page
-            event = Event(
-                name=request.form['name'],
-                location=request.form['location'],
-                event_type=request.form['event_type'],
-                start_datetime=start_datetime,
-                end_datetime=end_datetime,
-                event_description=request.form['event_description'],
-                contact_details=request.form['contact_details'],
-                event_size=request.form['event_size'],
-                user_id=session['user_id']  # Link the event to the logged-in user
-            )
-            db.session.add(event)
-            db.session.commit()
-            flash('Event created successfully!', 'success')
-            return redirect(url_for('login'))  # Redirect to events page after creating the event
-        except Exception as e:
-            flash(f'Error creating event: {e}', 'danger')
-            return redirect(url_for('events'))  # Stay on the event creation page if an error occurs
+        if start_datetime > end_datetime:
+            flash('Start date cannot be greater than the end date!', 'danger')
+            return redirect(url_for('new_event'))
 
-    return render_template('login.html')
+        event = Event(
+            name=request.form['name'],
+            location=request.form['location'],
+            event_type=request.form['event_type'],
+            start_datetime=start_datetime,
+            end_datetime=end_datetime,
+            event_description=request.form['event_description'],
+            contact_details=request.form['contact_details'],
+            event_size=request.form['event_size'],
+            user_id=session['user_id']
+        )
+        db.session.add(event)
+        db.session.commit()
+        flash('Event created successfully!', 'success')
+        return redirect(url_for('bookings'))
+
+    return render_template('new_event.html')
+
+@app.route('/bookings', methods=['GET', 'POST'])
+def bookings():
+    if request.method == 'POST':
+        num_people = int(request.form['num_people'])
+        hall_type = request.form['hall_type']
+        food_type = request.form['food_type']
+        food_menu = request.form['food_menu']
+
+        # Food and hall pricing
+        food_prices = {"basic": 180, "standard": 230, "premium": 300}
+        extra = 200 if food_type == "non-veg" else 0
+        hall_cost = 10000 if hall_type == "ac" else 7000
+
+        total_food_cost = (food_prices[food_menu] + extra) * num_people
+        total_cost = total_food_cost + hall_cost
+
+        # Store data in session
+        session['num_people'] = num_people
+        session['food_type'] = food_type
+        session['food_cost'] = total_food_cost
+        session['hall_cost'] = hall_cost
+        session['total_cost'] = total_cost
+
+        return redirect(url_for('summary'))
+
+    return render_template('bookings.html')
 
 
+@app.route('/summary', methods=['GET', 'POST'])
+def summary():
+    if request.method == 'POST':
+        payment_type = request.form.get('payment_type')
+        screenshot = request.files.get('screenshot')
+
+        if payment_type == 'online' and not screenshot:
+            flash("Please upload a screenshot for online payment.")
+            return redirect(url_for('summary'))
+
+        # Save the screenshot if uploaded
+        if screenshot:
+            filename = screenshot.filename
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            screenshot.save(filepath)
+            flash(f"Screenshot saved at {filepath}")
+
+        flash(f"Payment type selected: {payment_type}")
+        return redirect(url_for('summary'))
+
+    # Retrieve data from session
+    summary_data = {
+        "num_people": session.get('num_people', 0),
+        "food_type": session.get('food_type', 'unknown'),
+        "food_cost": session.get('food_cost', 0),
+        "hall_cost": session.get('hall_cost', 0),
+        "total_cost": session.get('total_cost', 0)
+    }
+    return render_template('summary.html', **summary_data)
 @app.route('/logout')
 def logout():
-    session.pop('user_id', None)  # Remove the user_id from the session
+    session.pop('user_id', None)
     flash('You have been logged out.', 'success')
-    return redirect(url_for('login'))  # Redirect to the login page
-
-
-# Other routes
-@app.route('/home')
-def home():
-    return render_template('index.html')
-
-@app.route('/about')
-def about():
-    return render_template('about.html')
-
-@app.route('/gallery')
-def gallery():
-    return render_template('gallery.html')
-
-@app.route('/contact')
-def contact():
-    return render_template('contact.html')
+    return redirect(url_for('login'))
 
 if __name__ == '__main__':
     app.run(debug=True)

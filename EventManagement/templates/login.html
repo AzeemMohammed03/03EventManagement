@@ -11,12 +11,8 @@
     <header>
         <nav>
             <ul>
-                <li><a href="{{ url_for('home') }}" target="_blank">Home</a></li>
                 <li><a href="{{ url_for('login') }}" target="_blank">Login</a></li>
                 <li><a href="{{ url_for('events') }}" target="_blank">Events</a></li>
-                <li><a href="{{ url_for('about') }}" target="_blank">About Us</a></li>
-                <li><a href="{{ url_for('gallery') }}" target="_blank">Gallery</a></li>
-                <li><a href="{{ url_for('contact') }}" target="_blank">Contact</a></li>
                 {% if 'user_id' in session %}
                     <li><a href="{{ url_for('logout') }}" class="logout-btn">Logout</a></li>
                 {% endif %}

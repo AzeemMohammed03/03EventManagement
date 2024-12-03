@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Summary</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='css/summary.css')}}">
+</head>
+<body>
+    <div class="container">
+        <h1>Event Summary</h1>
+        
+        <div class="summary-item">
+            <p>Number of People: {{ num_people }}</p>
+        </div>
+        <div class="summary-item">
+            <p>Food Type: {{ food_type | capitalize }}</p>
+        </div>
+        <div class="summary-item">
+            <p>Food Cost: ₹{{ food_cost }}</p>
+        </div>
+        <div class="summary-item">
+            <p>Hall Cost: ₹{{ hall_cost }}</p>
+        </div>
+        <div class="summary-item">
+            <p>Total Amount: ₹{{ total_cost }}</p>
+        </div>
+        
+        <form action="{{ url_for('summary') }}" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="payment_type">Payment Type:</label>
+                <select name="payment_type" id="payment_type" required>
+                    <option value="cash">Cash</option>
+                    <option value="online">Online</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <p>If you selected "Online," <br>send money to XYZ number <br>and upload the payment screenshot:</p>
+                <input type="file" name="screenshot" id="screenshot">
+            </div>
+            
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</body>
+</html>

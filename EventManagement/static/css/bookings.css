@@ -1,0 +1,85 @@
+/* General body styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: black;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Container for the form */
+.container {
+    background-color:rgb(19, 18, 18);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Header styling */
+h1 {
+    text-align: center;
+    color:white;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* Label and input field styling */
+label {
+    font-size: 16px;
+    color: white;
+    display: block;
+    margin-bottom: 8px;
+}
+
+/* Style for select fields and input fields */
+select, input[type="number"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+/* Button styling */
+button {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    /* background-color: #1abc9c; */
+    background-color:#FFA500 ;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #ff8800 ;
+    transition-duration: 0.3s;}
+
+/* Form group styling for spacing */
+.form-group {
+    margin-bottom: 15px;
+}
+
+/* Small responsive adjustments */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 20px;
+    }
+
+    .container {
+        padding: 15px;
+    }
+
+    select, input[type="number"], button {
+        font-size: 14px;
+    }
+}

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Confirm Event</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='css/bookings.css')}}">
+</head>
+<body>
+    <div class="container">
+        <h1>Event Confirmation</h1>
+        <form action="{{ url_for('bookings') }}" target="_blank" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="event_type">Event Type:</label>
+                <select name="event_type" id="event_type" required>
+                    <option value="wedding">Wedding</option>
+                    <option value="conference">Conference</option>
+                    <option value="party">Party</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="hall_type">Hall Type:</label>
+                <select name="hall_type" id="hall_type" required>
+                    <option value="ac">AC</option>
+                    <option value="non-ac">Non-AC</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="num_people">Number of People:</label>
+                <input type="number" name="num_people" id="num_people" required min="1">
+            </div>
+
+            <div class="form-group">
+                <label for="food_type">Food Type:</label>
+                <select name="food_type" id="food_type" required>
+                    <option value="veg">Veg</option>
+                    <option value="non-veg">Non-Veg (₹200 Extra per head)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="food_menu">Food Menu:</label>
+                <select name="food_menu" id="food_menu" required>
+                    <option value="basic">Basic (₹180 per person)</option>
+                    <option value="standard">Standard (₹230 per person)</option>
+                    <option value="premium">Premium (₹300 per person)</option>
+                </select>
+            </div>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</body>
+</html>
