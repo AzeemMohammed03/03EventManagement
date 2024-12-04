@@ -39,6 +39,24 @@ class Event(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     user = db.relationship('User', backref=db.backref('events', lazy=True))
 
+class Booking(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    event_id = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
+    num_people = db.Column(db.Integer, nullable=False)
+    hall_type = db.Column(db.String(50), nullable=False)
+    food_type = db.Column(db.String(50), nullable=False)
+    food_menu = db.Column(db.String(50), nullable=False)
+    total_cost = db.Column(db.Float, nullable=False)
+    event = db.relationship('Event', backref=db.backref('bookings', lazy=True))
+
+class Payment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    booking_id = db.Column(db.Integer, db.ForeignKey('booking.id'), nullable=False)
+    payment_type = db.Column(db.String(50), nullable=False)
+    screenshot = db.Column(db.String(100), nullable=True)
+    booking = db.relationship('Booking', backref=db.backref('payments', lazy=True))
+
+
 # Initialize the database
 with app.app_context():
     db.create_all()
@@ -133,12 +151,13 @@ def new_event():
         db.session.add(event)
         db.session.commit()
         flash('Event created successfully!', 'success')
-        return redirect(url_for('bookings'))
+        return redirect(url_for('bookings', event_id=event.id))  # Redirecting with event_id
 
     return render_template('new_event.html')
 
-@app.route('/bookings', methods=['GET', 'POST'])
-def bookings():
+@app.route('/bookings/<int:event_id>', methods=['GET', 'POST'])
+def bookings(event_id):
+    event = Event.query.get_or_404(event_id)  # Fetch event details
     if request.method == 'POST':
         num_people = int(request.form['num_people'])
         hall_type = request.form['hall_type']
@@ -153,20 +172,29 @@ def bookings():
         total_food_cost = (food_prices[food_menu] + extra) * num_people
         total_cost = total_food_cost + hall_cost
 
-        # Store data in session
-        session['num_people'] = num_people
-        session['food_type'] = food_type
-        session['food_cost'] = total_food_cost
-        session['hall_cost'] = hall_cost
-        session['total_cost'] = total_cost
+        # Create a booking record
+        booking = Booking(event_id=event_id, num_people=num_people, hall_type=hall_type,
+                          food_type=food_type, food_menu=food_menu, total_cost=total_cost)
+        db.session.add(booking)
+        db.session.commit()
 
-        return redirect(url_for('summary'))
+        flash("Booking confirmed!", "success")
+        session['booking_id'] = booking.id  # Store booking ID in session
+        return redirect(url_for('summary'))  # Assuming you have a 'summary' route
 
-    return render_template('bookings.html')
-
+    return render_template('bookings.html', event=event)
 
 @app.route('/summary', methods=['GET', 'POST'])
 def summary():
+    if 'booking_id' not in session:
+        flash("No booking found.", "danger")
+        return redirect(url_for('bookings'))
+
+    booking = Booking.query.get(session['booking_id'])
+    
+    # Fetch the event associated with this booking
+    event = Event.query.get(booking.event_id)
+
     if request.method == 'POST':
         payment_type = request.form.get('payment_type')
         screenshot = request.files.get('screenshot')
@@ -180,20 +208,26 @@ def summary():
             filename = screenshot.filename
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             screenshot.save(filepath)
-            flash(f"Screenshot saved at {filepath}")
 
-        flash(f"Payment type selected: {payment_type}")
+        # Create payment record
+        payment = Payment(booking_id=booking.id, payment_type=payment_type, 
+                          screenshot=filepath if screenshot else None)
+        db.session.add(payment)
+        db.session.commit()
+
+        flash(f"Payment type selected: {payment_type}", "success")
         return redirect(url_for('summary'))
 
-    # Retrieve data from session
-    summary_data = {
-        "num_people": session.get('num_people', 0),
-        "food_type": session.get('food_type', 'unknown'),
-        "food_cost": session.get('food_cost', 0),
-        "hall_cost": session.get('hall_cost', 0),
-        "total_cost": session.get('total_cost', 0)
-    }
-    return render_template('summary.html', **summary_data)
+    # Display summary data, now include 'event' for rendering the event details
+    return render_template('summary.html', 
+                           event=event,  # Pass the event object to the template
+                           num_people=booking.num_people,
+                           food_type=booking.food_type,
+                           food_cost=booking.total_cost - 10000,  # Assuming hall cost is fixed
+                           hall_cost=10000 if booking.hall_type == "ac" else 7000,
+                           total_cost=booking.total_cost)
+
+
 @app.route('/logout')
 def logout():
     session.pop('user_id', None)

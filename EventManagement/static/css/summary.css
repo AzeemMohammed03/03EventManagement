@@ -57,8 +57,9 @@ input[type="file"], select {
     font-size: 1rem;
     border: 1px solid #444;
     border-radius: 5px;
-    background: rgba(255, 255, 255, 0.1); /* Transparent white */
-    color: white;
+    background-color:whitesmoke;
+     /* Transparent white */
+    color:black;
     outline: none;
 }
 

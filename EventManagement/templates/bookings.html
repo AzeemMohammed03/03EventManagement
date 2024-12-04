@@ -7,7 +7,10 @@
 <body>
     <div class="container">
         <h1>Event Confirmation</h1>
-        <form action="{{ url_for('bookings') }}" method="post" enctype="multipart/form-data">
+        <form action="{{ url_for('bookings',event_id=event.id) }}" method="post" enctype="multipart/form-data">
+            <!-- Hidden input field to send event_id -->
+            <input type="hidden" name="event_id" value="{{ event.id }}">
+
             <div class="form-group">
                 <label for="event_type">Event Type:</label>
                 <select name="event_type" id="event_type" required>

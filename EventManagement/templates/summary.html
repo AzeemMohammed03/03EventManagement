@@ -41,7 +41,7 @@
 
             <div class="form-actions">
                 <button type="submit">Submit</button>
-                <a href="{{ url_for('bookings') }}" class="btn btn-secondary">Go Back</a>
+                <a href="{{ url_for('bookings',event_id=event.id) }}" class="btn btn-secondary">Go Back</a>
             </div>
         </form>
     </div>

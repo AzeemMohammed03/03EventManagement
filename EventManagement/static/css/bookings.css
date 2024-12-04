@@ -46,7 +46,7 @@ h1 {
 /* Label and input field styling */
 label {
     font-size: 1rem;
-    color: #e0e0e0; /* Lighter color for better readability */
+    color: #fb932c; /* Lighter color for better readability */
     display: block;
     margin-bottom: 10px;
 }
@@ -58,8 +58,9 @@ select, input[type="number"] {
     margin-bottom: 20px;
     border: 1px solid #444;
     border-radius: 6px;
-    background: rgba(255, 255, 255, 0.1); /* Transparent white */
-    color: white;
+    /* background: rgba(255, 255, 255, 0.1); Transparent white */
+    background: black; /* Transparent white */
+    color: rgb(251, 250, 249);
     font-size: 1rem;
     outline: none;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
