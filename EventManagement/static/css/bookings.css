@@ -1,85 +1,112 @@
 /* General body styling */
 body {
-    font-family: Arial, sans-serif;
-    background-color: black;
+    font-family: 'Poppins', Arial, sans-serif; /* Modern font */
+    background: linear-gradient(135deg, #1e1e2f, #2d2d44); /* Gradient background */
     margin: 0;
     padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
+    color: white;
 }
 
 /* Container for the form */
 .container {
-    background-color:rgb(19, 18, 18);
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background: rgba(0, 0, 0, 0.8); /* Transparent black */
+    padding: 30px;
+    border-radius: 12px; /* Slightly rounded corners */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5); /* Elevated shadow */
     width: 100%;
     max-width: 600px;
     margin: 0 auto;
+    animation: fadeIn 0.8s ease; /* Smooth fade-in effect */
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Header styling */
 h1 {
     text-align: center;
-    color:white;
-    font-size: 24px;
-    margin-bottom: 20px;
+    color: #FFA500; /* Vibrant orange title */
+    font-size: 2rem;
+    margin-bottom: 25px;
+    letter-spacing: 1px;
 }
 
 /* Label and input field styling */
 label {
-    font-size: 16px;
-    color: white;
+    font-size: 1rem;
+    color: #e0e0e0; /* Lighter color for better readability */
     display: block;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
 }
 
-/* Style for select fields and input fields */
+/* Select fields and input fields styling */
 select, input[type="number"] {
     width: 100%;
-    padding: 8px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #444;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.1); /* Transparent white */
+    color: white;
+    font-size: 1rem;
+    outline: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+select:focus, input[type="number"]:focus {
+    border-color: #ffa500; /* Highlight on focus */
+    box-shadow: 0 0 8px rgba(255, 165, 0, 0.8); /* Glow effect */
 }
 
 /* Button styling */
 button {
     width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    /* background-color: #1abc9c; */
-    background-color:#FFA500 ;
-    color: #fff;
+    padding: 14px;
+    font-size: 1rem;
+    font-weight: bold;
+    background: linear-gradient(90deg, #ff7e00, #ffa500); /* Gradient button */
+    color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 6px;
     cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Button shadow */
 }
 
 button:hover {
-    background-color: #ff8800 ;
-    transition-duration: 0.3s;}
+    background: linear-gradient(90deg, #ffa500, #ff7e00); /* Reversed gradient */
+    transform: translateY(-2px); /* Lift on hover */
+}
 
 /* Form group styling for spacing */
 .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
 /* Small responsive adjustments */
 @media (max-width: 768px) {
     h1 {
-        font-size: 20px;
+        font-size: 1.8rem;
     }
 
     .container {
-        padding: 15px;
+        padding: 20px;
     }
 
     select, input[type="number"], button {
-        font-size: 14px;
+        font-size: 0.9rem;
     }
 }

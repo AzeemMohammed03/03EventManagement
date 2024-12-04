@@ -7,34 +7,25 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/events.css') }}">
 </head>
 <body>
-    <!-- {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-        <div>
-            {% for category, message in messages %}
-                <div class="alert alert-{{ category }}">{{ message }}</div>
-            {% endfor %}
-        </div>
-    {% endif %}
-{% endwith %} -->
-
     <div class="form-container">
         <h1>Create an Event</h1>
         <form action="{{ url_for('new_event') }}" target="_blank" method="POST">
             <div class="form-group">
                 <label for="name">Name:</label>
-                <input type="text" id="name" name="name" required>
+                <input type="text" id="name" name="name" required placeholder="Enter your name">
             </div>
             <div class="form-group">
                 <label for="contact_details">Mobile Number:</label>
-                <input type="text" id="contact_details" name="contact_details" required>
+                <input type="text" id="contact_details" name="contact_details" required placeholder="Enter your mobile number">
             </div>
             <div class="form-group">
                 <label for="location">Event Location:</label>
-                <input type="text" id="location" name="location" required>
+                <input type="text" id="location" name="location" required placeholder="Enter event location">
             </div>
             <div class="form-group">
                 <label for="event_type">Type of Event:</label>
                 <select id="event_type" name="event_type" required>
+                    <option value="" disabled selected>Select event type</option>
                     <option value="public">Public</option>
                     <option value="private">Private</option>
                 </select>
@@ -49,18 +40,17 @@
             </div>
             <div class="form-group">
                 <label for="event_size">Event Size:</label>
-                <input type="number" id="event_size" name="event_size" required>
+                <input type="number" id="event_size" name="event_size" required placeholder="Enter expected number of attendees">
             </div>
             <div class="form-group">
                 <label for="event_description">Event Description:</label>
-                <textarea id="event_description" name="event_description" rows="4"></textarea>
+                <textarea id="event_description" name="event_description" rows="4" placeholder="Provide a brief description of the event"></textarea>
             </div>
             <div class="button-group">
                 <input type="submit" id="submit" name="submit" value="Submit">
                 <input type="reset" id="cancel" name="cancel" value="Cancel">
             </div>
         </form>
-        
     </div>
 </body>
 </html>

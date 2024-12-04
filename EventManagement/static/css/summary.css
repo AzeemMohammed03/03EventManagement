@@ -1,61 +1,119 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Poppins', Arial, sans-serif; /* Modern and clean font */
     margin: 0;
     padding: 0;
     height: 100vh; /* Full viewport height */
     display: flex;
     justify-content: center; /* Horizontally center */
     align-items: center; /* Vertically center */
-    background-color: black; /* Light background color for the page */
+    background: linear-gradient(to bottom right, #1e1e2f, #2d2d44); /* Gradient background */
+    color: white; /* Base text color */
 }
 
 .container {
-    background-color: rgb(22, 21, 21); /* Blue background color */
-    padding: 20px;
-    border-radius: 10px; /* Rounded corners */
-    max-width: 800px; /* Maximum width for the box */
-    width: 100%; /* Make sure the container is responsive */
-    box-sizing: border-box; /* Include padding and borders in element's total width and height */
+    background: rgba(0, 0, 0, 0.8); /* Transparent black background */
+    padding: 30px;
+    border-radius: 15px; /* Rounded corners */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); /* Soft shadow */
+    max-width: 600px;
+    width: 90%;
+    box-sizing: border-box;
+    animation: fadeIn 1s ease; /* Smooth entry animation */
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 h1 {
     text-align: center;
-    color: white; /* White color for the title */
+    color: #FFA500; /* Highlighted orange title */
+    font-size: 2rem;
+    margin-bottom: 20px;
 }
 
 .summary-item, .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     text-align: left;
-    color: white; /* White color for text */
 }
-#payment_type{
-    width: 40%;
-}
+
 .summary-item p, .form-group label {
-    font-size: 18px;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #e0e0e0; /* Slightly lighter text for contrast */
 }
 
 input[type="file"], select {
-    padding: 8px;
+    padding: 10px;
     width: 100%;
-    margin-top: 5px;
+    margin-top: 8px;
+    font-size: 1rem;
+    border: 1px solid #444;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.1); /* Transparent white */
+    color: white;
+    outline: none;
+}
+
+input[type="file"]:hover, select:hover {
+    background: rgba(255, 255, 255, 0.2); /* Brighter hover effect */
 }
 
 button {
-    position: relative;
-    left: 200px;
-    width: 50%;
-    padding: 10px;
-    font-size: 16px;
-    /* background-color: #1abc9c; */
-    background-color:#FFA500 ;
+    width: 100%;
+    padding: 12px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    background: linear-gradient(to right, #ff7e00, #ffa500); /* Gradient button */
     color: #fff;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
 }
 
 button:hover {
-    background-color: #ff8800 ;
-    transition-duration: 0.3s;
+    background: linear-gradient(to right, #ffa500, #ff7e00); /* Reversed gradient */
+    transform: translateY(-2px); /* Slight lift on hover */
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px; /* Spacing between buttons */
+    flex-wrap: wrap; /* Responsive button layout */
+    margin-top: 15px;
+}
+
+a.btn-secondary {
+    display: inline-block;
+    padding: 12px;
+    font-size: 1.1rem;
+    text-align: center;
+    text-decoration: none;
+    background: #555; /* Dark gray for secondary action */
+    color: #fff;
+    border-radius: 5px;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+a.btn-secondary:hover {
+    background: #777; /* Lighter gray on hover */
+    transform: translateY(-2px);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.8rem;
+    }
+    button, a.btn-secondary {
+        font-size: 1rem;
+    }
 }
