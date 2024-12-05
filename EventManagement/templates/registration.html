@@ -8,9 +8,9 @@
 </head>
 <body>
     <div>
-        <h1 id="header">New Registration</h1>
         
         <div id="registration-form">
+            <h1 id="header">New Registration</h1>
             <form action="{{ url_for('register')}}" target="_blank" method="POST">
                 <div class="form-group">
                     <label for="username">Username:</label>
@@ -41,8 +41,9 @@
                     <input type="text" id="city" name="city" placeholder="Enter your city">
                 </div>
                 <div class="buttons">
-                    <input type="submit" id="submit" name="submit" value="Submit">
                     <input type="reset" id="cancel" name="cancel" value="Cancel">
+                    <input type="submit" id="submit" name="submit" value="Submit">
+
                 </div>
             </form>
         </div>

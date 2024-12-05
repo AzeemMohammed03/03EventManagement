@@ -74,22 +74,46 @@ select:focus, input[type="number"]:focus {
 
 /* Button styling */
 button {
-    width: 100%;
-    padding: 14px;
-    font-size: 1rem;
-    font-weight: bold;
-    background: linear-gradient(90deg, #ff7e00, #ffa500); /* Gradient button */
+    width: 37%;
+    margin-left: 50px;
+    display: inline-block;
+    text-align: center;
+    padding: 12px 18px;
     color: white;
-    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid #ffa500;
     border-radius: 6px;
-    cursor: pointer;
-    transition: background 0.3s ease, transform 0.2s ease;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Button shadow */
+    text-decoration: none;
+    font-size: 1rem;
+    transition: background 0.3s ease, color 0.3s ease;
 }
 
 button:hover {
-    background: linear-gradient(90deg, #ffa500, #ff7e00); /* Reversed gradient */
-    transform: translateY(-2px); /* Lift on hover */
+    background: #ffa500;
+    color: #000;
+    border-color: white;
+}
+
+/* Back button styling */
+.btn-secondary {
+    width: 30%;
+    margin-left: 50px;
+    display: inline-block;
+    text-align: center;
+    padding: 12px 18px;
+    color: white;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid #ffa500;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background: #ffa500;
+    color: #000;
+    border-color: white;
 }
 
 /* Form group styling for spacing */

@@ -1,37 +1,32 @@
 /* General body styling */
 body {
-    font-family: Arial, sans-serif;
-    background-color: white;
+    font-family: 'Poppins', Arial, sans-serif; /* Modern font */
+    background: linear-gradient(135deg, #1e1e2f, #2d2d44); /* Gradient background */
     margin: 0;
     padding: 0;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start; /* Align items from top */
     height: 100vh;
-    background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), 
-                url('image.png') center/cover no-repeat;
+    color: white;
+    padding-top: 50px; /* Added space from top for heading */
 }
 
-/* Header styling */
-#header {
-    font-size: 50px;
-    color: rgb(244, 183, 80);
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-/* Registration form container */
+/* Container for the registration form */
 #registration-form {
-    /* background: rgba(255, 255, 255, 0.85); Transparent background */
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-    width: 100%;
-    max-width: 450px; /* Maximum width for better responsiveness */
-    animation: fadeIn 0.6s ease-out; /* Smooth fade-in animation */
+    background: rgba(0, 0, 0, 0.8); /* Transparent black */
+    padding: 30px;
+    border-radius: 12px; /* Slightly rounded corners */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5); /* Elevated shadow */
+    width: 130%;
+    max-width: 700px; /* Increased width for better display */
+    margin: 20px; /* Add margin around the form */
+    animation: fadeIn 0.8s ease; /* Smooth fade-in effect */
+    position: relative;
+    right: 85px;
 }
 
-/* Fade-in animation */
+/* Keyframe animation for smooth fade-in */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -43,92 +38,82 @@ body {
     }
 }
 
-/* Submit and cancel button styling */
-input#submit, input#cancel {
-    padding: 12px 25px;
-    font-size: 16px;
-    border-radius: 8px;
-    width: 48%;
-    cursor: pointer;
-    border: none;
-    transition: all 0.3s ease;
-    display: inline-block;
+/* Header styling */
+#header {
     text-align: center;
-}
-
-input#submit {
-    background-color: #0f55bf;
-    color: white;
-}
-
-input#cancel {
-    background-color: #dc3545;
-    color: white;
-}
-
-input[type="submit"]:hover, input[type="reset"]:hover {
-    opacity: 0.9;
-    transform: translateY(-2px);
-}
-
-/* Form-group styling */
-.form-group {
+    color: #FFA500; /* Vibrant orange title */
+    font-size: 2.5rem; /* Slightly larger header */
     margin-bottom: 20px;
+    letter-spacing: 1px;
 }
 
 /* Label styling */
-.form-group label {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 8px;
-    color: #fbcd4e;
+label {
+    font-size: 1rem;
+    color: #fb932c; /* Lighter color for better readability */
+    display: block;
+    margin-bottom: 10px;
 }
 
-/* Input fields styling */
-.form-group input {
+/* Input and text field styling */
+input[type="text"], input[type="password"], input[type="email"] {
     width: 100%;
     padding: 12px;
-    font-size: 16px;
-    border: 1px solid #bbb9b9;
+    margin-bottom: 20px;
+    border: 1px solid #444;
     border-radius: 6px;
-    box-sizing: border-box;
+    background: black; /* Black background */
+    color: rgb(251, 250, 249); /* White text */
+    font-size: 1rem;
+    outline: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.form-group input:focus {
-    border-color: #007bff;
-    outline: none;
-    box-shadow: 0 0 6px rgba(0, 123, 255, 0.7);
+input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focus {
+    border-color: #ffa500; /* Highlight on focus */
+    box-shadow: 0 0 8px rgba(255, 165, 0, 0.8); /* Glow effect */
 }
 
-/* Placeholder styling */
-.form-group input::placeholder {
-    color: #aaa;
+/* Buttons styling */
+.buttons input[type="submit"], .buttons input[type="reset"] {
+    width: 30%;
+    margin: 0 1%; /* Spacing between buttons */
+    margin-left: 68px;
+    padding: 12px 18px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid #ffa500;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease, color 0.3s ease;
 }
 
-/* Button container */
-.buttons {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
+.buttons input[type="submit"]:hover, .buttons input[type="reset"]:hover {
+    background: #ffa500;
+    color: black;
+    border-color: white;
 }
 
-/* Responsive adjustments */
+/* Form group styling for spacing */
+.form-group {
+    margin-bottom: 20px;
+    margin-right: 20px;
+}
+
+/* Small responsive adjustments */
 @media (max-width: 768px) {
     #header {
-        font-size: 40px;
+        font-size: 2rem; /* Slightly smaller on smaller screens */
     }
 
     #registration-form {
-        width: 90%;
-        max-width: 400px;
+        padding: 20px;
     }
 
-    input#submit, input#cancel {
-        width: 48%;
-    }
-
-    .form-group input {
-        font-size: 14px;
+    input[type="text"], input[type="password"], input[type="email"], .buttons input[type="submit"], .buttons input[type="reset"] {
+        font-size: 0.9rem;
     }
 }

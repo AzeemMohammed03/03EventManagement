@@ -1,120 +1,148 @@
+/* General styling for the body */
 body {
-    font-family: 'Poppins', Arial, sans-serif; /* Modern and clean font */
+    font-family: 'Poppins', Arial, sans-serif;
+    background: linear-gradient(135deg, #1e1e2f, #2d2d44);
     margin: 0;
-    padding: 0;
-    height: 100vh; /* Full viewport height */
+    padding: 20px; /* Add some padding to avoid touching screen edges */
     display: flex;
-    justify-content: center; /* Horizontally center */
-    align-items: center; /* Vertically center */
-    background: linear-gradient(to bottom right, #1e1e2f, #2d2d44); /* Gradient background */
-    color: white; /* Base text color */
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: white;
+    box-sizing: border-box; /* Ensures consistent box model */
 }
 
+/* Container for the event summary */
 .container {
-    background: rgba(0, 0, 0, 0.8); /* Transparent black background */
+    background: rgba(0, 0, 0, 0.8);
     padding: 30px;
-    border-radius: 15px; /* Rounded corners */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); /* Soft shadow */
-    max-width: 600px;
-    width: 90%;
-    box-sizing: border-box;
-    animation: fadeIn 1s ease; /* Smooth entry animation */
+    border-radius: 12px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    max-width: 700px;
+    margin: 20px auto; /* Add margin around the container */
+    animation: fadeIn 0.8s ease;
 }
 
+
+/* Animation for smooth entry */
 @keyframes fadeIn {
     from {
         opacity: 0;
-        transform: scale(0.9);
+        transform: translateY(20px);
     }
     to {
         opacity: 1;
-        transform: scale(1);
+        transform: translateY(0);
     }
 }
 
+/* Header styling */
 h1 {
     text-align: center;
-    color: #FFA500; /* Highlighted orange title */
+    color: #FFA500;
     font-size: 2rem;
+    margin-bottom: 25px;
+    letter-spacing: 1px;
+}
+
+/* Summary item styling */
+.summary-item {
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 12px 18px;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Form group styling */
+.form-group {
     margin-bottom: 20px;
 }
 
-.summary-item, .form-group {
-    margin-bottom: 20px;
-    text-align: left;
-}
-
-.summary-item p, .form-group label {
+/* Label styling */
+label {
     font-size: 1rem;
-    line-height: 1.5;
-    color: #e0e0e0; /* Slightly lighter text for contrast */
+    color: #fb932c;
+    display: block;
+    margin-bottom: 10px;
 }
 
-input[type="file"], select {
-    padding: 10px;
-    width: 100%;
-    margin-top: 8px;
-    font-size: 1rem;
-    border: 1px solid #444;
-    border-radius: 5px;
-    background-color:whitesmoke;
-     /* Transparent white */
-    color:black;
-    outline: none;
-}
-
-input[type="file"]:hover, select:hover {
-    background: rgba(255, 255, 255, 0.2); /* Brighter hover effect */
-}
-
-button {
+/* Select and input styling */
+select, input[type="file"] {
     width: 100%;
     padding: 12px;
-    font-size: 1.1rem;
-    font-weight: bold;
-    background: linear-gradient(to right, #ff7e00, #ffa500); /* Gradient button */
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background 0.3s ease, transform 0.2s ease;
+    border: 1px solid #444;
+    border-radius: 6px;
+    background: black;
+    color: rgb(251, 250, 249);
+    font-size: 1rem;
+    outline: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+select:focus, input[type="file"]:focus {
+    border-color: #ffa500;
+    box-shadow: 0 0 8px rgba(255, 165, 0, 0.8);
+}
+
+/* Button styling */
+button {
+    width: 26%;
+    margin-left: 80px;
+    display: inline-block;
+    text-align: center;
+    padding: 12px 18px;
+    color: white;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid #ffa500;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: background 0.3s ease, color 0.3s ease;
 }
 
 button:hover {
-    background: linear-gradient(to right, #ffa500, #ff7e00); /* Reversed gradient */
-    transform: translateY(-2px); /* Slight lift on hover */
+    background: #ffa500;
+    color: #000;
+    border-color: white;
 }
 
-.form-actions {
-    display: flex;
-    gap: 10px; /* Spacing between buttons */
-    flex-wrap: wrap; /* Responsive button layout */
-    margin-top: 15px;
-}
-
-a.btn-secondary {
+/* Back button styling */
+.btn-secondary {
+    width: 26%;
+    margin-left: 80px;
     display: inline-block;
-    padding: 12px;
-    font-size: 1.1rem;
     text-align: center;
+    padding: 12px 18px;
+    color: white;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid #ffa500;
+    border-radius: 6px;
     text-decoration: none;
-    background: #555; /* Dark gray for secondary action */
-    color: #fff;
-    border-radius: 5px;
-    transition: background 0.3s ease, transform 0.2s ease;
+    font-size: 1rem;
+    transition: background 0.3s ease, color 0.3s ease;
 }
 
-a.btn-secondary:hover {
-    background: #777; /* Lighter gray on hover */
-    transform: translateY(-2px);
+.btn-secondary:hover {
+    background: #ffa500;
+    color: #000;
+    border-color: white;
 }
 
-/* Mobile responsiveness */
+/* Small screen adjustments */
 @media (max-width: 768px) {
     h1 {
         font-size: 1.8rem;
     }
-    button, a.btn-secondary {
-        font-size: 1rem;
+
+    .container {
+        padding: 20px;
+    }
+
+    select, input[type="file"], button, .btn-secondary {
+        font-size: 0.9rem;
     }
 }

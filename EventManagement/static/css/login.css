@@ -106,23 +106,29 @@ header nav ul li a:hover {
     outline: none;
     border-color: #1abc9c;
 }
-
-#submit-btn {
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    /* background-color: #1abc9c; */
-    background-color:#FFA500 ;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
+/* Buttons styling */
+/* Button styling for Submit and Reset */
+.buttons input[type="reset"], #submit-btn {
+    width: 30%;
+    margin: 0 1%; /* Spacing between buttons */
+    margin-right: 15px;
+    padding: 12px 18px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid #ffa500;
+    border-radius: 6px;
     cursor: pointer;
+    transition: background 0.3s ease, color 0.3s ease;
 }
 
-#submit-btn:hover {
-    background-color: #ff8800 ;
-    transition-duration: 0.3s;
+.buttons input[type="reset"]:hover, #submit-btn:hover {
+    background: #ffa500;
+    color: black;
+    border-color: white;
 }
+
 
 footer {
     background-color: rgb(22, 21, 21);;
@@ -151,19 +157,28 @@ footer {
 }
 
 
+/* Logout button styling with new formatting */
 .logout-btn {
+    margin-left: 50px; /* Maintain left margin for alignment */
     position: relative;
-    left: 430px;
-    color: #ecf0f1;
-    text-decoration: none;
-    font-size: 16px;
-    padding: 10px 15px;
-    background-color: #e74c3c; /* Red for logout */
-    border-radius: 5px;
+    left: 430px; /* Custom left positioning */
+    padding: 10px 15px; /* Consistent padding for the button */
+    font-size: 1rem; /* Set a standard font size */
+    font-weight: bold; /* Bold text */
+    color: white; /* White text color */
+    background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+    border: 2px solid #e74c3c; /* Red border */
+    border-radius: 6px; /* Rounded corners */
+    text-decoration: none; /* Remove underline */
+    text-align: center; /* Center text inside the button */
+    /* display: inline-block; Allow for inline layout */
+    cursor: pointer; /* Change cursor on hover */
+    transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease; /* Smooth transition */
 }
 
 .logout-btn:hover {
-    background-color: #c0392b; /* Darker red on hover */
-    transition-duration: 0.3s;
+    background: red; /* Red background on hover */
+    color: black; /* Change text color to black on hover */
+    border-color: white; /* Darker red border on hover */
+    transition-duration: 0.3s; /* Smooth hover transition */
 }
-
