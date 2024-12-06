@@ -25,13 +25,12 @@
 
     <div class="container mt-4">
         <h1 class="mb-4">All Events</h1>
-
         <!-- Events Table -->
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>#</th>
-                    <th>Event Name</th>
+                    <th>ID</th>
+                    <!-- <th> Name</th> -->
                     <th>Location</th>
                     <th>Event Type</th>
                     <th>Start Date</th>
@@ -45,7 +44,7 @@
                 {% for event in events %}
                 <tr>
                     <td>{{ event.id }}</td>
-                    <td>{{ event.name }}</td>
+                    <!-- <td>{{ event.name }}</td> -->
                     <td>{{ event.location }}</td>
                     <td>{{ event.event_type }}</td>
                     <td>{{ event.start_datetime.strftime('%Y-%m-%d %H:%M') }}</td>
@@ -58,53 +57,59 @@
             </tbody>
         </table>
 
-        <!-- Bookings Table -->
         <h1 class="mt-5 mb-4">All Bookings</h1>
+        <!-- Bookings Table -->
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>#</th>
                     <th>Booking ID</th>
-                    <th>Event Name</th>
-                    <th>User</th>
-                    <th>Booking Date</th>
-                    <th>Seats Booked</th>
+                    <th>Booked By</th>
+                    <th>Number of People</th>
+                    <th>Hall Type</th>
+                    <th>Food Type</th>
+                    <th>Food Menu</th>
+                    <th>Total Cost</th>
                 </tr>
             </thead>
             <tbody>
                 {% for booking in bookings %}
                 <tr>
                     <td>{{ booking.id }}</td>
-                    <td>{{ booking.event.name }}</td>
-                    <td>{{ booking.user.username }}</td>
-                    <td>{{ booking.booking_date.strftime('%Y-%m-%d %H:%M') }}</td>
-                    <td>{{ booking.seats_booked }}</td>
+                    <td>{{ booking.event.name if booking.event else 'N/A' }}</td>
+                    <td>{{ booking.num_people }}</td>
+                    <td>{{ booking.hall_type }}</td>
+                    <td>{{ booking.food_type }}</td>
+                    <td>{{ booking.food_menu }}</td>
+                    <td>{{ booking.total_cost }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
 
-        <!-- Payments Table -->
         <h1 class="mt-5 mb-4">All Payments</h1>
+        <!-- Payments Table -->
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>#</th>
                     <th>Payment ID</th>
                     <th>Booking ID</th>
-                    <th>Amount</th>
-                    <th>Payment Status</th>
-                    <th>Payment Date</th>
+                    <th>Payment Type</th>
+                    <th>Screenshot</th>
                 </tr>
             </thead>
             <tbody>
                 {% for payment in payments %}
                 <tr>
                     <td>{{ payment.id }}</td>
-                    <td>{{ payment.booking.id }}</td>
-                    <td>{{ payment.amount }}</td>
-                    <td>{{ payment.status }}</td>
-                    <td>{{ payment.payment_date.strftime('%Y-%m-%d %H:%M') }}</td>
+                    <td>{{ payment.booking.id if payment.booking else 'N/A' }}</td>
+                    <td>{{ payment.payment_type }}</td>
+                    <td>
+                        {% if payment.screenshot %}
+                            <a href="{{ url_for('static', filename=payment.screenshot) }}" target="_blank">View</a>
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>

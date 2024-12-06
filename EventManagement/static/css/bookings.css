@@ -1,7 +1,6 @@
-/* General body styling */
 body {
-    font-family: 'Poppins', Arial, sans-serif; /* Modern font */
-    background: linear-gradient(135deg, #1e1e2f, #2d2d44); /* Gradient background */
+    font-family: 'Poppins', Arial, sans-serif;
+    background: linear-gradient(135deg, #1e1e2f, #2d2d44);
     margin: 0;
     padding: 0;
     display: flex;
@@ -11,16 +10,15 @@ body {
     color: white;
 }
 
-/* Container for the form */
 .container {
-    background: rgba(0, 0, 0, 0.8); /* Transparent black */
+    background: rgba(0, 0, 0, 0.8);
     padding: 30px;
-    border-radius: 12px; /* Slightly rounded corners */
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5); /* Elevated shadow */
+    border-radius: 12px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5);
     width: 100%;
     max-width: 600px;
     margin: 0 auto;
-    animation: fadeIn 0.8s ease; /* Smooth fade-in effect */
+    animation: fadeIn 0.8s ease;
 }
 
 @keyframes fadeIn {
@@ -34,32 +32,28 @@ body {
     }
 }
 
-/* Header styling */
 h1 {
     text-align: center;
-    color: #FFA500; /* Vibrant orange title */
+    color: #FFA500;
     font-size: 2rem;
     margin-bottom: 25px;
     letter-spacing: 1px;
 }
 
-/* Label and input field styling */
 label {
     font-size: 1rem;
-    color: #fb932c; /* Lighter color for better readability */
+    color: #fb932c;
     display: block;
     margin-bottom: 10px;
 }
 
-/* Select fields and input fields styling */
 select, input[type="number"] {
     width: 100%;
     padding: 12px;
     margin-bottom: 20px;
     border: 1px solid #444;
     border-radius: 6px;
-    /* background: rgba(255, 255, 255, 0.1); Transparent white */
-    background: black; /* Transparent white */
+    background: black;
     color: rgb(251, 250, 249);
     font-size: 1rem;
     outline: none;
@@ -68,11 +62,10 @@ select, input[type="number"] {
 }
 
 select:focus, input[type="number"]:focus {
-    border-color: #ffa500; /* Highlight on focus */
-    box-shadow: 0 0 8px rgba(255, 165, 0, 0.8); /* Glow effect */
+    border-color: #ffa500;
+    box-shadow: 0 0 8px rgba(255, 165, 0, 0.8);
 }
 
-/* Button styling */
 button {
     width: 37%;
     margin-left: 50px;
@@ -94,7 +87,6 @@ button:hover {
     border-color: white;
 }
 
-/* Back button styling */
 .btn-secondary {
     width: 30%;
     margin-left: 50px;
@@ -116,12 +108,10 @@ button:hover {
     border-color: white;
 }
 
-/* Form group styling for spacing */
 .form-group {
     margin-bottom: 20px;
 }
 
-/* Small responsive adjustments */
 @media (max-width: 768px) {
     h1 {
         font-size: 1.8rem;

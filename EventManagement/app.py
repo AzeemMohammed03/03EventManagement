@@ -251,7 +251,9 @@ def admin_events():
         return redirect(url_for('login'))
     
     events = Event.query.all()  # Get all events for admin view
-    return render_template('admin_events.html', events=events)
+    bookings = Booking.query.all()  # Fetch all bookings
+    payments = Payment.query.all()  # Fetch all payments
+    return render_template('admin_events.html', events=events,bookings=bookings,payments=payments)
 
 @app.route('/admin/event/delete/<int:event_id>', methods=['POST'])
 def delete_event(event_id):
