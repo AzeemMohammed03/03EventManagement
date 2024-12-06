@@ -64,8 +64,8 @@ input[type="text"], input[type="datetime-local"], input[type="number"], textarea
     padding: 12px;
     border: 1px solid #444;
     border-radius: 6px;
-    background: black;
-    color: rgb(251, 250, 249);
+    background:whitesmoke;
+    color: rgb(101, 100, 100);
     font-size: 1rem;
     outline: none;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);

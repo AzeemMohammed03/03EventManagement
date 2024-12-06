@@ -107,6 +107,14 @@ def login_submit():
 
     user = User.query.filter_by(username=username).first()
 
+    # Check if admin credentials
+    admin_username = "admin"
+    admin_password = "admin123"  # Admin credentials
+    if username == admin_username and password == admin_password:
+        session['is_admin'] = True
+        flash('Admin logged in successfully!', 'success')
+        return redirect(url_for('admin_events'))
+
     if user and check_password_hash(user.password, password):
         session['user_id'] = user.id
         flash('Logged in successfully!', 'success')
@@ -227,12 +235,36 @@ def summary():
                            hall_cost=10000 if booking.hall_type == "ac" else 7000,
                            total_cost=booking.total_cost)
 
-
 @app.route('/logout')
 def logout():
     session.pop('user_id', None)
+    session.pop('is_admin', None)  # Clear admin session data
     flash('You have been logged out.', 'success')
     return redirect(url_for('login'))
+
+# Admin routes
+
+@app.route('/admin/events')
+def admin_events():
+    if 'is_admin' not in session:
+        flash('Please log in as admin.', 'danger')
+        return redirect(url_for('login'))
+    
+    events = Event.query.all()  # Get all events for admin view
+    return render_template('admin_events.html', events=events)
+
+@app.route('/admin/event/delete/<int:event_id>', methods=['POST'])
+def delete_event(event_id):
+    if 'is_admin' not in session:
+        flash('Please log in as admin.', 'danger')
+        return redirect(url_for('login'))
+
+    event = Event.query.get_or_404(event_id)
+    db.session.delete(event)
+    db.session.commit()
+    flash('Event deleted successfully.', 'success')
+    return redirect(url_for('admin_events'))
+
 
 if __name__ == '__main__':
     app.run(debug=True)
