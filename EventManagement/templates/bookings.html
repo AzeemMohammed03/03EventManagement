@@ -12,6 +12,11 @@
             <input type="hidden" name="event_id" value="{{ event.id }}">
 
             <div class="form-group">
+                <label for="Email">Mail ID:</label>
+                <input type="email" id="email" name="email" required placeholder="Enter your email address">
+            </div>
+
+            <div class="form-group">
                 <label for="event_type">Event Type:</label>
                 <select name="event_type" id="event_type" required>
                     <option value="" disabled selected>Select event type</option>

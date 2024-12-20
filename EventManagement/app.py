@@ -2,6 +2,8 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
+from flask import request, redirect, url_for, flash
+from flask_mail import Mail, Message
 import os
 
 app = Flask(__name__)
@@ -41,6 +43,7 @@ class Event(db.Model):
 
 class Booking(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(120), nullable=False)
     event_id = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
     num_people = db.Column(db.Integer, nullable=False)
     hall_type = db.Column(db.String(50), nullable=False)
@@ -167,6 +170,7 @@ def new_event():
 def bookings(event_id):
     event = Event.query.get_or_404(event_id)  # Fetch event details
     if request.method == 'POST':
+        email = request.form['email']
         num_people = int(request.form['num_people'])
         hall_type = request.form['hall_type']
         food_type = request.form['food_type']
@@ -181,7 +185,7 @@ def bookings(event_id):
         total_cost = total_food_cost + hall_cost
 
         # Create a booking record
-        booking = Booking(event_id=event_id, num_people=num_people, hall_type=hall_type,
+        booking = Booking(email=email,event_id=event_id, num_people=num_people, hall_type=hall_type,
                           food_type=food_type, food_menu=food_menu, total_cost=total_cost)
         db.session.add(booking)
         db.session.commit()
@@ -267,6 +271,41 @@ def delete_event(event_id):
     flash('Event deleted successfully.', 'success')
     return redirect(url_for('admin_events'))
 
+
+# Initialize Flask-Mail
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
+app.config['MAIL_USERNAME'] = 'mdazeem1103@gmail.com'
+app.config['MAIL_PASSWORD'] = 'kpzo opeg wrcm qwby'
+app.config['MAIL_DEFAULT_SENDER'] = 'mdazeem1103@gmail.com'
+mail = Mail(app)
+
+@app.route('/send_email', methods=['POST'])
+def send_email():
+    email = request.form['email']
+    appointment_date = request.form['appointment_date']
+    appointment_time = request.form['appointment_time']
+    message_content = request.form['message']
+
+    try:
+        msg = Message(
+            subject="Appointment Details",
+            recipients=[email],
+            body=(f"Dear User,\n\n"
+                  f"Here are the details of your appointment:\n"
+                  f"Date: {appointment_date}\n"
+                  f"Time: {appointment_time}\n\n"
+                  f"Message:\n{message_content}\n\n"
+                  f"Best regards,\nEvent Management Team")
+        )
+        mail.send(msg)
+        flash("Email sent successfully!", "success")
+    except Exception as e:
+        flash(f"Failed to send email: {str(e)}", "danger")
+
+    return redirect(url_for('admin_events'))  # Redirect back to the admin dashboard after sending email
 
 if __name__ == '__main__':
     app.run(debug=True)

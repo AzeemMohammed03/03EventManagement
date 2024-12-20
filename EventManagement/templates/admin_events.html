@@ -63,24 +63,33 @@
             <thead>
                 <tr>
                     <th>Booking ID</th>
+                    <th>Email ID</th>
                     <th>Booked By</th>
                     <th>Number of People</th>
                     <th>Hall Type</th>
                     <th>Food Type</th>
                     <th>Food Menu</th>
                     <th>Total Cost</th>
+                    <th>Send Email</th>
                 </tr>
             </thead>
             <tbody>
                 {% for booking in bookings %}
                 <tr>
                     <td>{{ booking.id }}</td>
+                    <td>{{ booking.email }}</td>
                     <td>{{ booking.event.name if booking.event else 'N/A' }}</td>
                     <td>{{ booking.num_people }}</td>
                     <td>{{ booking.hall_type }}</td>
                     <td>{{ booking.food_type }}</td>
                     <td>{{ booking.food_menu }}</td>
                     <td>{{ booking.total_cost }}</td>
+                    <td>
+                        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#emailModal" 
+        data-email="{{ booking.email }}">
+    Send Email
+</button>
+                    </td>                    
                 </tr>
                 {% endfor %}
             </tbody>
@@ -116,6 +125,50 @@
         </table>
     </div>
 
+   <!-- Modal for sending email -->
+<div class="modal fade" id="emailModal" tabindex="-1" aria-labelledby="emailModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="emailModalLabel">Send Email</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="emailForm" method="POST" action="{{ url_for('send_email') }}">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="appointment_date" class="form-label">Appointment Date</label>
+                        <input type="date" class="form-control" id="appointment_date" name="appointment_date" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="appointment_time" class="form-label">Appointment Time</label>
+                        <input type="time" class="form-control" id="appointment_time" name="appointment_time" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="message" class="form-label">Message</label>
+                        <textarea class="form-control" id="message" name="message" rows="3" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Send Email</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+    
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const emailModal = document.getElementById('emailModal');
+        emailModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;  // Button that triggered the modal
+            const email = button.getAttribute('data-email');  // Extract the email from data-email attribute
+            const emailInput = emailModal.querySelector('#email');
+            emailInput.value = email;  // Set the email input value
+        });
+    </script>
+    
 </body>
 </html>
