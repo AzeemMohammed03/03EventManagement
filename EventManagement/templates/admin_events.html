@@ -23,15 +23,15 @@
         </div>
     </nav>
 
-    <div class="container mt-4">
-        <h1 class="mb-4">All Events</h1>
+    <!-- <div class="container mt-4"> -->
+        <!-- <h1 class="mb-4">All Events</h1> -->
         <!-- Events Table -->
-        <table class="table table-striped">
+        <!-- <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>ID</th> -->
                     <!-- <th> Name</th> -->
-                    <th>Location</th>
+                    <!-- <th>Location</th>
                     <th>Event Type</th>
                     <th>Start Date</th>
                     <th>End Date</th>
@@ -43,9 +43,9 @@
             <tbody>
                 {% for event in events %}
                 <tr>
-                    <td>{{ event.id }}</td>
+                    <td>{{ event.id }}</td> -->
                     <!-- <td>{{ event.name }}</td> -->
-                    <td>{{ event.location }}</td>
+                    <!-- <td>{{ event.location }}</td>
                     <td>{{ event.event_type }}</td>
                     <td>{{ event.start_datetime.strftime('%Y-%m-%d %H:%M') }}</td>
                     <td>{{ event.end_datetime.strftime('%Y-%m-%d %H:%M') }}</td>
@@ -54,8 +54,8 @@
                     <td>{{ event.user.username if event.user else 'N/A' }}</td>
                 </tr>
                 {% endfor %}
-            </tbody>
-        </table>
+            </tbody> -->
+        <!-- </table> -->
 
         <h1 class="mt-5 mb-4">All Bookings</h1>
         <!-- Bookings Table -->
@@ -179,6 +179,11 @@
         </div>
     </form>
 </div>
+
+<div class="col-md-4">
+    <a href="{{ url_for('manage_halls') }}" class="btn btn-success" target="_blank">Update/Delete</a>
+</div>
+
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>

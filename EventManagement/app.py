@@ -5,7 +5,6 @@ from flask_login import current_user
 from datetime import datetime
 from flask import request, redirect, url_for, flash
 from flask_mail import Mail, Message
-
 import os
 
 app = Flask(__name__)
@@ -135,7 +134,7 @@ def login_submit():
     if user and check_password_hash(user.password, password):
         session['user_id'] = user.id
         flash('Logged in successfully!', 'success')
-        return redirect(url_for('events'))
+        return redirect(url_for('login'))
     else:
         flash('Invalid username or password!', 'danger')
         return redirect(url_for('login'))
