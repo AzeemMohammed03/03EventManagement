@@ -63,6 +63,7 @@
             <thead>
                 <tr>
                     <th>Booking ID</th>
+                    <th>Hall Name</th>
                     <th>Email ID</th>
                     <th>Booked By</th>
                     <th>Number of People</th>
@@ -77,6 +78,7 @@
                 {% for booking in bookings %}
                 <tr>
                     <td>{{ booking.id }}</td>
+                    <td>{{ booking.hall_name }}</td>
                     <td>{{ booking.email }}</td>
                     <td>{{ booking.event.name if booking.event else 'N/A' }}</td>
                     <td>{{ booking.num_people }}</td>
@@ -157,7 +159,27 @@
         </div>
     </div>
 </div>
-    
+
+
+<div class="container mt-4">
+    <h1 class="mb-4">Manage Halls</h1>
+
+    <!-- Add Hall Form -->
+    <form method="POST" action="{{ url_for('manage_halls') }}" target="_blank">
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <input type="text" class="form-control" name="hall_name" placeholder="Hall Name" required>
+            </div>
+            <div class="col-md-4">
+                <input type="text" class="form-control" name="hall_description" placeholder="Description" required>
+            </div>
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-success">Add Hall</button>
+            </div>
+        </div>
+    </form>
+</div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
     <script>

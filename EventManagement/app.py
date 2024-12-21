@@ -1,9 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import current_user
 from datetime import datetime
 from flask import request, redirect, url_for, flash
 from flask_mail import Mail, Message
+
 import os
 
 app = Flask(__name__)
@@ -45,12 +47,18 @@ class Booking(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), nullable=False)
     event_id = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
+    hall_id = db.Column(db.Integer, db.ForeignKey('hall.id'), nullable=False)  # Add this line
     num_people = db.Column(db.Integer, nullable=False)
     hall_type = db.Column(db.String(50), nullable=False)
     food_type = db.Column(db.String(50), nullable=False)
     food_menu = db.Column(db.String(50), nullable=False)
     total_cost = db.Column(db.Float, nullable=False)
+    hall_name = db.Column(db.String(100), nullable=False)
+    event_type = db.Column(db.String(50), nullable=False)
     event = db.relationship('Event', backref=db.backref('bookings', lazy=True))
+    hall = db.relationship('Hall', backref=db.backref('bookings', lazy=True))  # Add this line
+    
+
 
 class Payment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -58,6 +66,12 @@ class Payment(db.Model):
     payment_type = db.Column(db.String(50), nullable=False)
     screenshot = db.Column(db.String(100), nullable=True)
     booking = db.relationship('Booking', backref=db.backref('payments', lazy=True))
+
+class Hall(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.Text, nullable=True)
+    is_booked = db.Column(db.Boolean, default=False)
 
 
 # Initialize the database
@@ -162,19 +176,31 @@ def new_event():
         db.session.add(event)
         db.session.commit()
         flash('Event created successfully!', 'success')
-        return redirect(url_for('bookings', event_id=event.id))  # Redirecting with event_id
+        return redirect(url_for('user_hall', event_id=event.id))  # Redirecting with event_id
 
     return render_template('new_event.html')
+
 
 @app.route('/bookings/<int:event_id>', methods=['GET', 'POST'])
 def bookings(event_id):
     event = Event.query.get_or_404(event_id)  # Fetch event details
+    halls = Hall.query.all()
+    hall_id = request.args.get('hall_id')  # Get hall_id from query parameters
+    hall_name = request.args.get('hall_name')  # Get the hall name from the query parameters
+    hall = Hall.query.get_or_404(hall_id)  # Fetch hall details
+
     if request.method == 'POST':
         email = request.form['email']
+        event_type = request.form['event_type']
         num_people = int(request.form['num_people'])
         hall_type = request.form['hall_type']
         food_type = request.form['food_type']
         food_menu = request.form['food_menu']
+        hall = Hall.query.get(hall_id)
+        if hall:
+            hall_name = hall.name  # Get the hall name from the Hall table
+        else:
+            hall_name = None  # or some default value if hall is not found
 
         # Food and hall pricing
         food_prices = {"basic": 180, "standard": 230, "premium": 300}
@@ -184,9 +210,21 @@ def bookings(event_id):
         total_food_cost = (food_prices[food_menu] + extra) * num_people
         total_cost = total_food_cost + hall_cost
 
+        
+
         # Create a booking record
-        booking = Booking(email=email,event_id=event_id, num_people=num_people, hall_type=hall_type,
-                          food_type=food_type, food_menu=food_menu, total_cost=total_cost)
+        booking = Booking(
+            event_id=event_id,
+            hall_id=hall.id,  # Pass hall.id to the booking
+            email=email,
+            event_type=event_type,
+            hall_type=hall_type,
+            num_people=num_people,
+            food_type=food_type,
+            food_menu=food_menu,
+            total_cost=total_cost,
+            hall_name=hall_name  # Store the hall name
+        )
         db.session.add(booking)
         db.session.commit()
 
@@ -194,7 +232,8 @@ def bookings(event_id):
         session['booking_id'] = booking.id  # Store booking ID in session
         return redirect(url_for('summary'))  # Assuming you have a 'summary' route
 
-    return render_template('bookings.html', event=event)
+    return render_template('bookings.html', event=event, halls=halls, hall_name=hall_name)
+
 
 @app.route('/summary', methods=['GET', 'POST'])
 def summary():
@@ -306,6 +345,76 @@ def send_email():
         flash(f"Failed to send email: {str(e)}", "danger")
 
     return redirect(url_for('admin_events'))  # Redirect back to the admin dashboard after sending email
+
+@app.route('/admin/halls', methods=['GET', 'POST'])
+def manage_halls():
+    if request.method == 'POST':
+        # Add new hall
+        name = request.form['hall_name']
+        description = request.form['hall_description']
+        new_hall = Hall(name=name, description=description)
+        db.session.add(new_hall)
+        db.session.commit()
+        return redirect(url_for('manage_halls'))
+    halls = Hall.query.all()
+    return render_template('halls.html', halls=halls)
+
+@app.route('/admin/halls/update/<int:hall_id>', methods=['POST'])
+def update_hall(hall_id):
+    hall = Hall.query.get(hall_id)
+    if hall:
+        hall.name = request.form['hall_name']
+        hall.description = request.form['hall_description']
+        db.session.commit()
+    return redirect(url_for('manage_halls'))
+
+@app.route('/admin/halls/delete/<int:hall_id>', methods=['POST'])
+def delete_hall(hall_id):
+    hall = Hall.query.get(hall_id)
+    if hall:
+        db.session.delete(hall)
+        db.session.commit()
+    return redirect(url_for('manage_halls'))
+
+@app.route('/halls')
+def halls_page():
+    halls = Hall.query.all()
+    return render_template('halls.html', halls=halls)
+@app.route('/user_hall/<int:event_id>', methods=['GET', 'POST'])
+def user_hall(event_id):
+    event = Event.query.get_or_404(event_id)  # Fetch event details using event_id
+    halls = Hall.query.all()  # Get the list of halls
+    
+    # Handle the form submission for hall booking
+    if request.method == 'POST':
+        hall_id = request.form.get('hall_id')  # Get hall ID from form
+        hall = Hall.query.get(hall_id)
+        if hall and not hall.is_booked:
+            hall.is_booked = True
+            db.session.commit()
+            flash("Hall booked successfully!", "success")
+        else:
+            flash("This hall is already booked.", "error")
+        
+        # Redirect to the bookings page to fill event details
+        return redirect(url_for('bookings', event_id=event_id, hall_id=hall_id))
+
+    return render_template('user_hall.html', event=event, halls=halls)
+
+@app.route('/halls/book/<int:hall_id>', methods=['POST'])
+def book_hall(hall_id):
+    hall = Hall.query.get(hall_id)
+    event_id = request.args.get('event_id')  # Get event_id from query parameters
+    
+    if hall and not hall.is_booked:
+        hall.is_booked = True
+        db.session.commit()
+        flash("Booking confirmed!", "success")
+        return redirect(url_for('bookings', event_id=event_id))  # Redirect to the 'bookings' page with event_id
+
+    flash("This hall is already booked.", "error")
+    return redirect(url_for('summary', event_id=event_id))  # Redirect back to bookings page
+
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -7,9 +7,10 @@
 <body>
     <div class="container">
         <h1>Event Confirmation</h1>
-        <form action="{{ url_for('bookings',event_id=event.id) }}" method="post" enctype="multipart/form-data">
-            <!-- Hidden input field to send event_id -->
+        <form action="{{ url_for('bookings', event_id=event.id, hall_id=request.args.get('hall_id')) }}" method="post" enctype="multipart/form-data">
+            <!-- Hidden input field to send event_id and hall_id -->
             <input type="hidden" name="event_id" value="{{ event.id }}">
+            <input type="hidden" name="hall_id" value="{{ request.args.get('hall_id') }}">
 
             <div class="form-group">
                 <label for="Email">Mail ID:</label>
@@ -58,10 +59,10 @@
                     <option value="premium">Premium (₹300 per person)</option>
                 </select>
             </div>
-
-            <a href="{{ url_for('events',event_id=event.id) }}" class="btn btn-secondary">Go Back</a>
+            
+            <p>Selected Hall: {{ request.args.get('hall_id') }}</p> <!-- Show selected hall -->
+            
             <button type="submit">Submit</button>
-
         </form>
     </div>
 </body>
