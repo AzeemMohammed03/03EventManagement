@@ -72,6 +72,12 @@ class Hall(db.Model):
     description = db.Column(db.Text, nullable=True)
     is_booked = db.Column(db.Boolean, default=False)
 
+class Notification(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, nullable=False)
+    message = db.Column(db.Text, nullable=False)
+    is_read = db.Column(db.Boolean, default=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
 # Initialize the database
 with app.app_context():
@@ -295,7 +301,8 @@ def admin_events():
     events = Event.query.all()  # Get all events for admin view
     bookings = Booking.query.all()  # Fetch all bookings
     payments = Payment.query.all()  # Fetch all payments
-    return render_template('admin_events.html', events=events,bookings=bookings,payments=payments)
+    users = User.query.all() 
+    return render_template('admin_events.html', events=events,bookings=bookings,payments=payments,users=users)
 
 @app.route('/admin/event/delete/<int:event_id>', methods=['POST'])
 def delete_event(event_id):
@@ -413,6 +420,34 @@ def book_hall(hall_id):
 
     flash("This hall is already booked.", "error")
     return redirect(url_for('summary', event_id=event_id))  # Redirect back to bookings page
+
+
+@app.route('/notifications')
+def notifications():
+    # Fetch user-specific notifications from the database
+    if 'user_id' in session:
+        user_id = session['user_id']
+        user_notifications = Notification.query.filter_by(user_id=user_id, is_read=False).all()
+        return render_template('notifications.html', notifications=user_notifications)
+    return redirect(url_for('admin_events'))
+
+
+@app.route('/send_notification', methods=['POST'])
+def send_notification():
+    if 'is_admin' not in session:
+        flash('Please log in as admin.', 'danger')
+        return redirect(url_for('login'))  # Ensure only admins can send notifications
+
+    user_id = request.form['user_id']
+    message = request.form['message']
+
+    # Save the notification to the database
+    notification = Notification(user_id=user_id, message=message, is_read=False)
+    db.session.add(notification)
+    db.session.commit()
+
+    flash('Notification sent successfully!', 'success')
+    return redirect(url_for('admin_events'))
 
 
 if __name__ == '__main__':
